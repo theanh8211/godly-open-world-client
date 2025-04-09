@@ -1,0 +1,104 @@
+{
+  "theanh": {
+    "password": "200111",
+    "id": "3whworqpk6t",
+    "coins": 2029,
+    "characterName": "the anh",
+    "nameChangeCount": 7,
+    "nameChangeCost": 1135,
+    "lastX": 828.7499889579206,
+    "lastY": 632.9733478907103,
+    "inventory": [
+      {
+        "name": "Ice",
+        "color": 47083
+      },
+      {
+        "name": "Light",
+        "color": 16777215
+      },
+      {
+        "name": "Fire",
+        "color": 16729344
+      },
+      {
+        "name": "Dark",
+        "color": 4915330
+      },
+      {
+        "name": "Earth",
+        "color": 9127187
+      },
+      {
+        "name": "Nature",
+        "color": 65280
+      },
+      {
+        "name": "Void",
+        "color": 0
+      },
+      {
+        "name": "Light",
+        "color": 16777215
+      },
+      {
+        "name": "Ice",
+        "color": 47083
+      },
+      {
+        "name": "Wind",
+        "color": 8900331
+      },
+      {
+        "name": "Earth",
+        "color": 9127187
+      },
+      {
+        "name": "Thunder",
+        "color": 16776960
+      },
+      {
+        "name": "Earth",
+        "color": 9127187
+      },
+      {
+        "name": "Dark",
+        "color": 4915330
+      },
+      {
+        "name": "Void",
+        "color": 0
+      },
+      {
+        "name": "Fire",
+        "color": 16729344
+      },
+      {
+        "name": "Void",
+        "color": 0
+      },
+      {
+        "name": "Dark",
+        "color": 4915330
+      }
+    ]
+  },
+  "theanh1": {
+    "password": "200111",
+    "id": "yxs5jl0m1r",
+    "coins": 363,
+    "inventory": [
+      {
+        "name": "Nature",
+        "color": 65280
+      },
+      {
+        "name": "Ice",
+        "color": 47083
+      }
+    ],
+    "characterName": "Trùm Ngáo",
+    "nameChangeCount": 1,
+    "nameChangeCost": 100
+  }
+}

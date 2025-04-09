@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Adventure</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="auth-container" class="container">
+        <div class="auth-box">
+            <h2 id="auth-title">Login</h2>
+            <input id="username" type="text" placeholder="Username" class="auth-input">
+            <input id="password" type="password" placeholder="Password" class="auth-input">
+            <label><input id="remember-me" type="checkbox"> Remember me</label>
+            <button id="auth-btn">Login</button>
+            <span id="toggle-auth">Don't have an account? Register</span>
+        </div>
+    </div>
+    <div id="name-container" class="container" style="display: none;">
+        <div class="auth-box">
+            <h2>Choose Your Name</h2>
+            <input id="character-name" type="text" placeholder="Character Name" class="auth-input">
+            <button id="name-btn">Confirm</button>
+        </div>
+    </div>
+    <div id="game-container" style="display: none;">
+        <div id="game-canvas"></div>
+        <div id="ui-container">
+            <div id="leaderboard" class="ui-box"></div>
+            <div id="quests" class="ui-box"></div>
+            <div id="menu-container" class="ui-box">
+                <div id="menu-tabs">
+                    <button class="menu-btn" id="info-btn">Info</button>
+                    <button class="menu-btn" id="inventory-btn">Bag</button>
+                    <button class="menu-btn" id="trade-btn">Trade</button>
+                    <button class="menu-btn" id="settings-btn">Settings</button>
+                    <button class="menu-btn" id="exit-btn">Exit</button>
+                </div>
+                <div id="menu-content" class="menu-content" style="display: none;"></div>
+            </div>
+            <div id="chat-container" class="ui-box">
+                <div id="chat-box"></div>
+                <div id="chat-input-container">
+                    <input id="chat-input" type="text" placeholder="Type to chat..." class="chat-input">
+                    <button id="chat-send" class="chat-send">Send</button>
+                </div>
+            </div>
+            <div id="trade-container" class="ui-box" style="display: none;"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
