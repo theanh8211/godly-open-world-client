@@ -7,6 +7,6 @@
   },
   "dependencies": {
     "ws": "^8.16.0",
-    "bcrypt": "^5.1.1"
+    "bcryptjs": "^3.0.2"
   }
 }
