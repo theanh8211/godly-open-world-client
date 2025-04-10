@@ -1,8 +1,6 @@
 app = "godly-open-world"
 primary_region = "sin"
 
-[build]
-
 [env]
   PORT = "8080"
 
@@ -17,6 +15,10 @@ primary_region = "sin"
   [[services.ports]]
     port = 443
     handlers = ["tls", "http"]
+
+  [[services.ports]]
+    port = 8080
+    handlers = ["tls"]
 
   [[services.tcp_checks]]
     interval = 10000
