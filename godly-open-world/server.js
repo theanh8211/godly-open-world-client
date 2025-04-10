@@ -1,7 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const server = http.createServer();
 const wss = new WebSocket.Server({ server });

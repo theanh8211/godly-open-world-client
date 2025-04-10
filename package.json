@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "ws": "^8.18.1"
   },
   "name": "godly-open-world",
