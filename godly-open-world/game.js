@@ -28,7 +28,7 @@ let miniMap, miniMapPlayers = {};
 let currentMenuTab = null;
 
 function initWebSocket() {
-  ws = new WebSocket('wss://godly-open-world.fly.dev:8080');
+  ws = new WebSocket('wss://godly-open-world.fly.dev');
   ws.onopen = () => console.log('WebSocket connected');
   ws.onerror = (error) => {
     console.error('WebSocket error:', error);
