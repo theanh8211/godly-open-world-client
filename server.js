@@ -2,31 +2,23 @@ const fs = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
 
-// Tạo server HTTP
 const server = http.createServer();
-
-// Tạo WebSocket server gắn với server HTTP
 const wss = new WebSocket.Server({ server });
 
-// Lấy cổng từ biến môi trường hoặc mặc định 8080
 const PORT = process.env.PORT || 8080;
 
-// Khởi động server trên 0.0.0.0
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on ws://0.0.0.0:${PORT}`);
 });
 
-// Khai báo biến toàn cục
 let users = {};
 let onlinePlayers = {};
 let tiles = [];
 
-// Đọc dữ liệu người dùng từ file nếu tồn tại
 if (fs.existsSync('users.json')) {
   users = JSON.parse(fs.readFileSync('users.json'));
 }
 
-// Hàm tạo tiles ban đầu
 function generateInitialTiles() {
   for (let x = 0; x < 10000; x += 50) {
     for (let y = 0; y < 10000; y += 50) {
@@ -42,13 +34,12 @@ function generateInitialTiles() {
   }
 }
 
-// Tạo tiles nếu chưa có
 if (tiles.length === 0) {
   generateInitialTiles();
 }
 
-// Xử lý kết nối WebSocket
 wss.on('connection', (ws) => {
+  console.log('New client connected'); // Giữ log từ local
   ws.on('message', (message) => {
     const data = JSON.parse(message);
 

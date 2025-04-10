@@ -25,3 +25,5 @@ primary_region = "sin"
     timeout = 2000
     grace_period = "5s"
     restart_limit = 0
+    restart_limit = 0
+
