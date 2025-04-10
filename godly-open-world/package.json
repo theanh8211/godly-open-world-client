@@ -6,12 +6,6 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "ws": "^8.18.0"
-  }
-}
-
-{
-  "dependencies": {
     "ws": "^8.16.0",
     "bcrypt": "^5.1.1"
   }
