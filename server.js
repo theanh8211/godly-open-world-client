@@ -7,7 +7,7 @@ const server = http.createServer();
 const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 8080;
-const USER_FILE = '/data/users.json';
+const USER_FILE = './users.json';
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on ws://0.0.0.0:${PORT} - Primary region: ${process.env.FLY_REGION || 'unknown'}`);
