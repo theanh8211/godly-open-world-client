@@ -29,7 +29,7 @@ let currentMenuTab = null;
 
 function initWebSocket() {
 
-    ws = new WebSocket('wss://godly-open-world.fly.dev:8080'); // Thay đổi từ wss://godly-open-world.fly.dev
+    ws = new WebSocket('wss://godly-open-world.fly.dev')
     ws.onopen = () => console.log('WebSocket connected');
     ws.onerror = (error) => {
         console.error('WebSocket error:', error);
