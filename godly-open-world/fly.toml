@@ -21,9 +21,17 @@ primary_region = "sin" # Region cố định, ví dụ: Singapore
       method = "GET"
       path = "/health"
       
-[[services.ports]]
-  port = 8080
-  handlers = ["tls"]
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
 
 [mounts]
   source = "data"
