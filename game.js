@@ -28,14 +28,14 @@ let miniMap, miniMapPlayers = {};
 let currentMenuTab = null;
 
 function initWebSocket() {
-  ws = new WebSocket('wss://godly-open-world.fly.dev');
-  ws.onopen = () => console.log('WebSocket connected');
-  ws.onerror = (error) => {
-    console.error('WebSocket error:', error);
-    setTimeout(initWebSocket, 2000); // Thử lại sau 2 giây
-  };
-  ws.onclose = () => console.log('WebSocket closed');
-  return ws;
+    ws = new WebSocket('wss://godly-open-world.fly.dev:8080'); // Thay đổi từ wss://godly-open-world.fly.dev
+    ws.onopen = () => console.log('WebSocket connected');
+    ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        setTimeout(initWebSocket, 2000); // Thử lại sau 2 giây
+    };
+    ws.onclose = () => console.log('WebSocket closed');
+    return ws;
 }
 
 function preload() {
