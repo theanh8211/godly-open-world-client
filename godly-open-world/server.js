@@ -1,3 +1,4 @@
+const fs = require('fs');
 const http = require('http');
 const server = http.createServer();
 const WebSocket = require('ws');
