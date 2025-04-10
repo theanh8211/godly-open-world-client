@@ -1,7 +1,14 @@
-const WebSocket = require('ws');
 const fs = require('fs');
+const http = require('http');
+const server = http.createServer();
+const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ server });
+
+let PORT = process.env.PORT || 8080;
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on ws://0.0.0.0:${PORT}`);
+});
 let users = {};
 let onlinePlayers = {};
 let tiles = [];
@@ -201,4 +208,4 @@ wss.on('connection', (ws) => {
     });
 });
 
-console.log('Server running on ws://localhost:8080');
+console.log('Server running on ws://0.0.0.0:8080');
