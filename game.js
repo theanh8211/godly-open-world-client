@@ -28,12 +28,15 @@ let miniMap, miniMapPlayers = {};
 let currentMenuTab = null;
 
 function initWebSocket() {
-    ws = new WebSocket('wss://godly-open-world.fly.dev');
+    ws = new WebSocket('wss://godly-open-world.fly.dev:8080');
     ws.onopen = () => console.log('WebSocket connected');
-    ws.onerror = (error) => console.error('WebSocket error:', error);
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+      setTimeout(initWebSocket, 2000); // Thử lại sau 2 giây
+    };
     ws.onclose = () => console.log('WebSocket closed');
     return ws;
-}
+  }
 
 function preload() {
     this.load.image('player', 'https://raw.githubusercontent.com/phaserjs/examples/master/public/assets/sprites/phaser-dude.png');
