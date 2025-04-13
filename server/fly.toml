@@ -6,10 +6,6 @@
 app = 'godly-open-world'
 primary_region = 'sin'
 
-[build]
-  builder = "paketobuildpacks/builder:full"
-  buildpacks = ["gcr.io/paketo-buildpacks/nodejs"]
-
 [env]
   PORT = '8080'
 
