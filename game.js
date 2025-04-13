@@ -28,7 +28,7 @@ let miniMap, miniMapPlayers = {};
 let currentMenuTab = null;
 
 function initWebSocket() {
-    ws = new WebSocket('wss://godly-open-world.fly.dev')
+    ws = new WebSocket('wss://godly-open-world.fly.dev');
     ws.onopen = () => console.log('WebSocket connected');
     ws.onerror = (error) => {
         console.error('WebSocket error:', error);
@@ -36,24 +36,24 @@ function initWebSocket() {
     };
     ws.onclose = () => console.log('WebSocket closed');
     return ws;
-  }
+}
 
 function preload() {
     this.load.image('player', 'https://raw.githubusercontent.com/phaserjs/examples/master/public/assets/sprites/phaser-dude.png');
 }
 
 function create() {
-    this.add.rectangle(0, 0, MAP_SIZE, MAP_SIZE, 0x228B22).setOrigin(0).setDepth(0);
+    this.add.rectangle(0, 0, MAP_SIZE, MAP_SIZE, 0x228B22).setOrigin(0).setDepth(0); // Background depth 0
 
     const startX = userData.lastX || (Math.random() * (MAP_SIZE - 100) + 50);
     const startY = userData.lastY || (Math.random() * (MAP_SIZE - 100) + 50);
 
     player = this.physics.add.sprite(startX, startY, 'player');
     player.setCollideWorldBounds(true);
-    player.setDepth(1);
+    player.setDepth(2); // Player depth 2
     player.coins = userData.coins || 0;
     player.id = userData.id;
-    player.chatText = this.add.text(0, 0, userData.characterName, {color: '#fff', fontSize: '12px', stroke: '#000', strokeThickness: 2});
+    player.chatText = this.add.text(0, 0, userData.characterName, {color: '#fff', fontSize: '12px', stroke: '#000', strokeThickness: 2}).setDepth(3); // Chat depth 3
 
     this.cameras.main.setBounds(0, 0, MAP_SIZE, MAP_SIZE);
     this.cameras.main.startFollow(player, true, 0.1, 0.1);
@@ -80,12 +80,14 @@ function create() {
     const infoBtn = document.getElementById('info-btn');
     const inventoryBtn = document.getElementById('inventory-btn');
     const tradeBtn = document.getElementById('trade-btn');
+    const rankBtn = document.getElementById('rank-btn'); // Thêm Rank button
     const settingsBtn = document.getElementById('settings-btn');
     const exitBtn = document.getElementById('exit-btn');
 
     infoBtn.onclick = () => toggleMenuTab('info', infoBtn);
     inventoryBtn.onclick = () => toggleMenuTab('inventory', inventoryBtn);
     tradeBtn.onclick = () => showTradeInterface();
+    rankBtn.onclick = () => toggleMenuTab('rank', rankBtn); // Xử lý Rank button
     settingsBtn.onclick = () => toggleMenuTab('settings', settingsBtn);
     exitBtn.onclick = logout;
 
@@ -192,8 +194,7 @@ function spawnTiles(tileData) {
     tiles.forEach(t => t.destroy());
     tiles = [];
     tileData.forEach(t => {
-        const tile = game.scene.scenes[0].add.rectangle(t.x, t.y, TILE_SIZE, TILE_SIZE, t.color).setOrigin(0);
-        tile.setDepth(0);
+        const tile = game.scene.scenes[0].add.rectangle(t.x, t.y, TILE_SIZE, TILE_SIZE, t.color).setOrigin(0).setDepth(1); // Tiles depth 1
         tiles.push(tile);
     });
 }
@@ -210,8 +211,7 @@ function checkAndSpawnTiles() {
             } while (overlap);
             const colors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff];
             const tile = game.scene.scenes[0].add.rectangle(x, y, TILE_SIZE, TILE_SIZE, 
-                colors[Math.floor(Math.random() * colors.length)]).setOrigin(0);
-            tile.setDepth(0);
+                colors[Math.floor(Math.random() * colors.length)]).setOrigin(0).setDepth(1); // Tiles depth 1
             tiles.push(tile);
             if (ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify({type: 'spawn_tile', tile: {x, y, color: tile.fillColor}}));
@@ -277,6 +277,11 @@ function updateMenuContent(type) {
             <button class="menu-option" id="logout-btn">Logout</button>
         `;
         document.getElementById('logout-btn').onclick = logout;
+    } else if (type === 'rank') { // Thêm nội dung Rank
+        contentDiv.innerHTML = `
+            <div class="menu-option">Leaderboard (Coming Soon)</div>
+            <div class="menu-option">Top Players: TBD</div>
+        `;
     }
 }
 
@@ -483,35 +488,18 @@ function handleWebSocketMessage(event) {
     } else if (data.type === 'init_players') {
         data.players.forEach(p => {
             if (p.id === player.id) return;
-            if (!players[p.id]) {
-                players[p.id] = game.scene.scenes[0].physics.add.sprite(p.x, p.y, 'player');
-                players[p.id].setDepth(1);
-                players[p.id].chatText = game.scene.scenes[0].add.text(p.x - 16, p.y - 32, p.characterName, 
-                    {color: '#fff', fontSize: '12px', stroke: '#000', strokeThickness: 2});
-                players[p.id].characterName = p.characterName;
-                miniMapPlayers[p.id] = game.scene.scenes[0].add.circle(10 + (p.x * 200 / MAP_SIZE), 
-                    10 + (p.y * 200 / MAP_SIZE), 5, 0x00ff00).setOrigin(0.5).setScrollFactor(0);
-            } else {
-                players[p.id].x = p.x;
-                players[p.id].y = p.y;
-            }
+            addOrUpdatePlayer(p.id, p.x, p.y, p.characterName);
         });
     } else if (data.type === 'join') {
         if (data.id === player.id) return;
-        if (!players[data.id]) {
-            players[data.id] = game.scene.scenes[0].physics.add.sprite(data.x, data.y, 'player');
-            players[data.id].setDepth(1);
-            players[data.id].chatText = game.scene.scenes[0].add.text(data.x - 16, data.y - 32, data.characterName, 
-                {color: '#fff', fontSize: '12px', stroke: '#000', strokeThickness: 2});
-            players[data.id].characterName = data.characterName;
-            miniMapPlayers[data.id] = game.scene.scenes[0].add.circle(10 + (data.x * 200 / MAP_SIZE), 
-                10 + (data.y * 200 / MAP_SIZE), 5, 0x00ff00).setOrigin(0.5).setScrollFactor(0);
-        }
+        addOrUpdatePlayer(data.id, data.x, data.y, data.characterName);
     } else if (data.type === 'move') {
         if (data.id === player.id) return;
         if (players[data.id]) {
             players[data.id].x = data.x;
             players[data.id].y = data.y;
+            miniMapPlayers[data.id].x = 10 + (data.x * 200 / MAP_SIZE);
+            miniMapPlayers[data.id].y = 10 + (data.y * 200 / MAP_SIZE);
         }
     } else if (data.type === 'chat') {
         addChatMessage(data.characterName, data.message);
@@ -561,9 +549,25 @@ function handleWebSocketMessage(event) {
     } else if (data.type === 'mine_tile') {
         tiles = tiles.filter(t => !(t.x === data.tile.x && t.y === data.tile.y));
     } else if (data.type === 'spawn_tile') {
-        const tile = game.scene.scenes[0].add.rectangle(data.tile.x, data.tile.y, TILE_SIZE, TILE_SIZE, data.tile.color).setOrigin(0);
-        tile.setDepth(0);
+        const tile = game.scene.scenes[0].add.rectangle(data.tile.x, data.tile.y, TILE_SIZE, TILE_SIZE, data.tile.color).setOrigin(0).setDepth(1); // Tiles depth 1
         tiles.push(tile);
+    }
+}
+
+function addOrUpdatePlayer(id, x, y, characterName) {
+    if (!players[id]) {
+        players[id] = game.scene.scenes[0].physics.add.sprite(x, y, 'player').setDepth(2); // Player depth 2
+        players[id].chatText = game.scene.scenes[0].add.text(x - 16, y - 32, characterName, 
+            {color: '#fff', fontSize: '12px', stroke: '#000', strokeThickness: 2}).setDepth(3); // Chat depth 3
+        players[id].characterName = characterName;
+        miniMapPlayers[id] = game.scene.scenes[0].add.circle(10 + (x * 200 / MAP_SIZE), 
+            10 + (y * 200 / MAP_SIZE), 5, 0x00ff00).setOrigin(0.5).setScrollFactor(0);
+    } else {
+        players[id].x = x;
+        players[id].y = y;
+        players[id].chatText.setText(characterName);
+        miniMapPlayers[id].x = 10 + (x * 200 / MAP_SIZE);
+        miniMapPlayers[id].y = 10 + (y * 200 / MAP_SIZE);
     }
 }
 
@@ -640,7 +644,6 @@ nameBtn.onclick = () => {
 function startGame() {
     nameContainer.style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
-
     const config = {
         type: Phaser.AUTO,
         width: window.innerWidth * 0.8,
@@ -651,6 +654,16 @@ function startGame() {
         pixelArt: true
     };
     game = new Phaser.Game(config);
+
+    // Thêm listener để resize
+    window.addEventListener('resize', () => {
+        game.scale.resize(window.innerWidth * 0.8, window.innerHeight);
+    });
+
+    // Gửi join khi game khởi động
+    if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({type: 'join', id: userData.id, x: userData.lastX || 0, y: userData.lastY || 0, characterName: userData.characterName}));
+    }
 }
 
 ws = initWebSocket();

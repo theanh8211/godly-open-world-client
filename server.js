@@ -18,7 +18,7 @@ let onlinePlayers = {};
 let tiles = [];
 const connectionLimits = new Map();
 const MAX_CONNECTIONS_PER_IP = 5;
-const MESSAGE_RATE_LIMIT = 10; // 10 tin nhắn/phút
+const MESSAGE_RATE_LIMIT = 20; // Tăng lên 20 tin nhắn/phút để giảm spam
 const rateLimits = new Map();
 
 if (fs.existsSync(USER_FILE)) {
@@ -60,17 +60,21 @@ function saveUsers() {
 function checkRateLimit(clientIp) {
   const now = Date.now();
   if (!rateLimits.has(clientIp)) {
-    rateLimits.set(clientIp, { count: 1, lastReset: now });
+    rateLimits.set(clientIp, { count: 1, lastReset: now, logged: false });
     return true;
   }
   const limit = rateLimits.get(clientIp);
   if (now - limit.lastReset > 60000) {
     limit.count = 1;
     limit.lastReset = now;
+    limit.logged = false;
     return true;
   }
   if (limit.count >= MESSAGE_RATE_LIMIT) {
-    console.log(`Rate limit exceeded for IP ${clientIp}`);
+    if (!limit.logged) {
+      console.log(`Rate limit exceeded for IP ${clientIp}`);
+      limit.logged = true;
+    }
     return false;
   }
   limit.count++;
@@ -120,7 +124,7 @@ wss.on('connection', (ws, req) => {
         if (users[data.username]) {
           ws.send(JSON.stringify({ type: 'auth', success: false, message: 'Username already exists' }));
         } else {
-          const hashedPassword = await bcrypt.hash(data.password, 10); // Cho phép ký tự đặc biệt
+          const hashedPassword = await bcrypt.hash(data.password, 10);
           const user = {
             id: data.username,
             username: data.username,
